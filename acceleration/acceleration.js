@@ -13,11 +13,6 @@ module.exports = function (RED) {
                 "db": "tires",
                 "schema": "hackaton",
                 "table": "accgyr",
-                // "where": {
-                //     "DID": {
-                //         "=": "RESTTEST"
-                //     }
-                // }
             }
 
             var buff = new Buffer(JSON.stringify(query)).toString("base64");
@@ -31,7 +26,15 @@ module.exports = function (RED) {
             };
 
             request.get(options, function (error, response, body) {
-                msg.payload = body;
+                var obj = JSON.parse(body);
+                var op = obj.result.data.map(function(item) {
+                    var x = "acx :" +item[2];
+                    var y = " acy :" +item[3];
+                    var z = " acz :" +item[4];
+
+                    return x + y + z;
+                })
+                msg.payload = op;
                 node.send(msg);
             });
 

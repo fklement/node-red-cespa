@@ -10,7 +10,6 @@ module.exports = function (RED) {
                 certFile = path.resolve(__dirname, '../ssl/RESTTEST_cert.pem'),
                 keyFile = path.resolve(__dirname, '../ssl/RESTTEST_key.pem'),
                 request = require('request');
-                console.log(this.requestedinfo);
             const query = {
                 "db": "tires",
                 "schema": "hackaton",
@@ -28,8 +27,6 @@ module.exports = function (RED) {
 
             request.get(options, function (error, response, body) {
                 var obj = JSON.parse(body);
-                msg.payload = obj;
-                node.send(msg);
                 var op = obj.result.data.map(function(item) {
                     return item[node.requestedinfo];
                 })
