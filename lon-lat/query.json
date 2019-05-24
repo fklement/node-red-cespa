@@ -1,0 +1,10 @@
+{
+    "db": "tires",
+    "schema": "rnd_prt",
+    "table": "acc",
+    "where": {
+        "DID": {
+            "=": "RESTTEST"
+        }
+    }
+}

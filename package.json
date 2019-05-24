@@ -29,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/fklement/node-red-cespa/issues"
   },
-  "homepage": "https://github.com/fklement/node-red-cespa#readme"
+  "homepage": "https://github.com/fklement/node-red-cespa#readme",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
 }
