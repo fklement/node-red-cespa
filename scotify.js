@@ -4,7 +4,9 @@ const fs = require('fs'),
     certFile = path.resolve(__dirname, 'ssl/RESTTEST_cert.pem'),
     keyFile = path.resolve(__dirname, 'ssl/RESTTEST_key.pem');
 
-var array = require('lodash/array');
+var _array = require('lodash/array');
+var _lang = require('lodash/lang');
+var _collection = require('lodash/collection');
 
 // Set our values that are needed to connect to the RESTapi via SSL/TLS
 cert = fs.readFileSync(certFile);
@@ -22,11 +24,31 @@ getOptions = (query) => {
     }
 }
 
+getResponseData = (data, requestedColumns) => {
+    return data.map(function (item) {
+        var results = [];
+
+        Object.keys(requestedColumns).forEach(function (key) {
+            results.push([
+                key,
+                item[requestedColumns[key]]
+            ])
+
+        });
+        return _array.fromPairs(results);
+    });
+};
+
 // Returns the difference of our current timestamp and the query timestamp as an integer
 exports.calcTimeDiff = (currentTimestamp, queryTimestamp) => parseInt(currentTimestamp - (queryTimestamp * 1000000));
 
 // Execute the final query and fetches the data from the REST API + handles error cases and dataItems "overflow"
-exports.execQuery = (query, node, msg, requestedColumns) => {
+function queryImplementation(query, node, msg, requestedColumns, requestDataHead) {
+    var requestDataHead = requestDataHead || {
+        "items": [],
+        "itemsCount": 0
+    };
+
     request.get(getOptions(query), function (error, response, body) {
         node.status({
             fill: "blue",
@@ -37,28 +59,37 @@ exports.execQuery = (query, node, msg, requestedColumns) => {
         body = JSON.parse(body);
 
         if (response.statusCode == 200) {
+            var receivedItems = _lang.toArray(getResponseData(body.result.data, requestedColumns));
+
+            // Filtering out all unwanted device id's
+            if (receivedItems.length > 0)
+                receivedItems = _collection.filter(receivedItems, function (row) {
+                    return row.did === "181812101806072401603";
+                });
+
+            // Merging of all items
+            requestDataHead.items = requestDataHead.items.concat(receivedItems);
+            requestDataHead.itemsCount = body.result["items-left"];
+
+            node.status({
+                fill: "blue",
+                shape: "dot",
+                text: "still " + requestDataHead.itemsCount + " items more to fetch"
+            });
+
+            if (requestDataHead.itemsCount > 0) {
+                query["next-item"] = body.result["next-item"];
+                return queryImplementation(query, node, msg, requestedColumns, requestDataHead, false);
+            }
+
             node.status({
                 fill: "green",
                 shape: "dot",
-                text: "received 200"
+                text: "fetched all data"
             });
 
-            msg.payload = {
-                "items": body.result.data.map(function (item) {
-                    var results = [];
-
-                    Object.keys(requestedColumns).forEach(function (key) {
-                        results.push([
-                            key,
-                            item[requestedColumns[key]]
-                        ])
-
-                    });
-                    return array.fromPairs(results);
-                }),
-                "itemsCount": body.result["items-left"]
-            };
-
+            requestDataHead.itemsCount = Object.keys(requestDataHead.items).length;
+            msg.payload = requestDataHead;
             node.send(msg);
         } else {
             node.status({
@@ -71,3 +102,5 @@ exports.execQuery = (query, node, msg, requestedColumns) => {
         }
     });
 }
+
+exports.execQuery = (query, node, msg, requestedColumns, requestDataHead) => queryImplementation(query, node, msg, requestedColumns, requestDataHead)
