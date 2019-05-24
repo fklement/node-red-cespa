@@ -1,27 +1,73 @@
 const fs = require('fs'),
     path = require('path'),
+    request = require('request'),
     certFile = path.resolve(__dirname, 'ssl/RESTTEST_cert.pem'),
     keyFile = path.resolve(__dirname, 'ssl/RESTTEST_key.pem');
 
-// Set our values that are needed to connect to the RESTapi via SSL/TLS
-exports.cert = fs.readFileSync(certFile);
-exports.key = fs.readFileSync(keyFile);
+var array = require('lodash/array');
 
-// const options = {
-//     url: scotify.execQuery(query),
-//     cert: scotify.cert,
-//     key: scotify.key
-// };
+// Set our values that are needed to connect to the RESTapi via SSL/TLS
+cert = fs.readFileSync(certFile);
+key = fs.readFileSync(keyFile);
 
 // Decodes the given JSON query object to an base64 string and concatinates it with our url
-exports.execQuery = (queryObject) => "https://ctpwyd.conti.de:443/data?q=" + new Buffer.from(JSON.stringify(queryObject)).toString("base64");
+getApiUrl = (queryObject) => "https://ctpwyd.conti.de:443/data?q=" + new Buffer.from(JSON.stringify(queryObject)).toString("base64");
+
+// Returns the request options object with the respective tls credentials for the cert and key
+getOptions = (query) => {
+    return {
+        url: getApiUrl(query),
+        cert: cert,
+        key: key
+    }
+}
 
 // Returns the difference of our current timestamp and the query timestamp as an integer
 exports.calcTimeDiff = (currentTimestamp, queryTimestamp) => parseInt(currentTimestamp - (queryTimestamp * 1000000));
 
-// exports.composePayload = (body) => {
-//     {
-//         "items": body.result.data,
-//         "itemsCount": body.result["items-left"]
-//     }
-// }
+// Execute the final query and fetches the data from the REST API + handles error cases and dataItems "overflow"
+exports.execQuery = (query, node, msg, requestedColumns) => {
+    request.get(getOptions(query), function (error, response, body) {
+        node.status({
+            fill: "blue",
+            shape: "dot",
+            text: "send request"
+        });
+
+        body = JSON.parse(body);
+
+        if (response.statusCode == 200) {
+            node.status({
+                fill: "green",
+                shape: "dot",
+                text: "received 200"
+            });
+
+            msg.payload = {
+                "items": body.result.data.map(function (item) {
+                    var results = [];
+
+                    Object.keys(requestedColumns).forEach(function (key) {
+                        results.push([
+                            key,
+                            item[requestedColumns[key]]
+                        ])
+
+                    });
+                    return array.fromPairs(results);
+                }),
+                "itemsCount": body.result["items-left"]
+            };
+
+            node.send(msg);
+        } else {
+            node.status({
+                fill: "red",
+                shape: "dot",
+                text: "error " + error
+            });
+
+            node.error("error", body.error);
+        }
+    });
+}
