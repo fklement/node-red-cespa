@@ -30,6 +30,7 @@ module.exports = function (RED) {
 
 
             scotify.execQuery(query, node, msg, {
+                did: 0,
                 chargeState: 5
             });
 

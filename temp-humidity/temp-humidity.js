@@ -33,7 +33,8 @@ module.exports = function (RED) {
 
 
             var columns = [];
-
+            columns.push(["did", 0]);
+            
             if (node.requestedinfo == 3) {
                 columns.push(["hum", node.requestedinfo]);
             } else {
