@@ -1,0 +1,31 @@
+<script type="text/javascript">
+    RED.nodes.registerType('temp-humidity', {
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            name: {
+                value: ""
+            },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "white-globe.png",
+        label: function () {
+            return this.name || "temp-humidity";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="temp-humidity">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <select type="text" id="node-input-name">
+            <option value="TEMP">Temperature</option>
+            <option value="HUMIDITY">Humidity</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="temp-humidity">
+    <p>A simple node that provides the temperature and humidity</p>
+</script>
