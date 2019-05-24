@@ -31,15 +31,23 @@ module.exports = function (RED) {
                 }
             }
 
+
+            var columns = [];
+
+            if(node.requestedinfo == 3){
+//                columns.push({"hum": })
+            }
             
             if(node.requestedinfo == 3){
                 var ne = "EEE"
                 scotify.execQuery(query, node, msg, array.fromPairs(ne, node.requestedinfo));
             }else{
-                scotify.execQuery(query, node, msg, {
-                    temp: node.requestedinfo
-                });
+                
             }
+
+            scotify.execQuery(query, node, msg, {
+                temp: node.requestedinfo
+            });
 
             
 
