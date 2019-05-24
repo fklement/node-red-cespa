@@ -13,11 +13,7 @@ module.exports = function (RED) {
                 "db": "tires",
                 "schema": "hackaton",
                 "table": "gps",
-                 "where": {
-                     "did": {
-                         "=": "181812101806072401603"
-                     }
-                 }
+                 
             }
 
             var buff = new Buffer(JSON.stringify(query)).toString("base64");
