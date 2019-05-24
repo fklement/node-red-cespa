@@ -30,9 +30,10 @@ module.exports = function (RED) {
 
             scotify.execQuery(query, node, msg, {
                 did: 0,
-                x: 1,
-                y: 2,
-                z: 3
+                altitude: 1,
+                lat: 5,
+                lon: 6,
+                speed: 7
             });
         });
     }
