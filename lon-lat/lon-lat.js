@@ -12,20 +12,20 @@ module.exports = function (RED) {
                 "db": "tires",
                 "schema": "hackaton",
                 "table": "gps",
-                // "where": {
-                //     "AND": [
-                //         // {
-                //         //     "DID": {
-                //         //         "=": "RESTTEST"
-                //         //     }
-                //         // },
-                //         // {
-                //         //     "TS": {
-                //         //         ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
-                //         //     }
-                //         // }
-                //     ]
-                // }
+                "where": {
+                    //     "AND": [
+                    //         // {
+                    //         //     "DID": {
+                    //         //         "=": "RESTTEST"
+                    //         //     }
+                    //         // },
+                    // {
+                    "TS": {
+                        ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
+                    }
+                    // }
+                    // ]
+                }
             }
 
             scotify.execQuery(query, node, msg, {
