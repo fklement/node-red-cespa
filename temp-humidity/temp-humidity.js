@@ -13,7 +13,6 @@ module.exports = function (RED) {
                 "db": "tires",
                 "schema": "hackaton",
                 "table": "ruuvidata",
-                 
             }
 
             var buff = new Buffer(JSON.stringify(query)).toString("base64");
@@ -27,7 +26,7 @@ module.exports = function (RED) {
             };
 
             request.get(options, function (error, response, body) {
-                msg.payload = body;
+                msg.payload = node.prefix + msg.payload.toLowerCase();
                 node.send(msg);
             });
 

@@ -5,11 +5,12 @@
         defaults: {
             name: {
                 value: ""
-            }
+            },
+            prefix: {value:""}
         },
         inputs: 1,
         outputs: 1,
-        icon: "file.png",
+        icon: "logo.png",
         label: function () {
             return this.name || "temp-humidity";
         }
@@ -19,7 +20,10 @@
 <script type="text/x-red" data-template-name="temp-humidity">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
+        <select type="text" id="node-input-name">
+            <option value="TEMP">Temperature</option>
+            <option value="HUMIDITY">Humidity</option>
+        </select>
     </div>
 </script>
 
