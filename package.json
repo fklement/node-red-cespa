@@ -1,0 +1,33 @@
+{
+  "name": "node-red-cespa",
+  "version": "0.0.1",
+  "description": "Usefull nodes to interact with the CESpa telematic system",
+  "node-red": {
+    "nodes": {
+      "charge": "charge/charge.js",
+      "lon-lat": "lon-lat/lon-lat.js",
+      "pressure": "pressure/pressure.js",
+      "acceleration": "acceleration/acceleration.js",
+      "temp-humidity": "temp-humidity/temp-humidity.js",
+      "torque": "torque/torque.js"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fklement/node-red-cespa.git"
+  },
+  "keywords": [
+    "CESpa",
+    "Node-RED",
+    "fiction2sience"
+  ],
+  "author": "Team Scotify",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fklement/node-red-cespa/issues"
+  },
+  "homepage": "https://github.com/fklement/node-red-cespa#readme"
+}
