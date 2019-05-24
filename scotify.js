@@ -13,6 +13,7 @@ key = fs.readFileSync(keyFile);
 // Decodes the given JSON query object to an base64 string and concatinates it with our url
 getApiUrl = (queryObject) => "https://ctpwyd.conti.de:443/data?q=" + new Buffer.from(JSON.stringify(queryObject)).toString("base64");
 
+// Returns the request options object with the respective tls credentials for the cert and key
 getOptions = (query) => {
     return {
         url: getApiUrl(query),
@@ -24,9 +25,8 @@ getOptions = (query) => {
 // Returns the difference of our current timestamp and the query timestamp as an integer
 exports.calcTimeDiff = (currentTimestamp, queryTimestamp) => parseInt(currentTimestamp - (queryTimestamp * 1000000));
 
-
+// Execute the final query and fetches the data from the REST API + handles error cases and dataItems "overflow"
 exports.execQuery = (query, node, msg, requestedColumns) => {
-
     request.get(getOptions(query), function (error, response, body) {
         node.status({
             fill: "blue",
