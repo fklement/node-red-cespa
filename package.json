@@ -9,7 +9,8 @@
       "pressure": "pressure/pressure.js",
       "acceleration": "acceleration/acceleration.js",
       "temp-humidity": "temp-humidity/temp-humidity.js",
-      "torque": "torque/torque.js"
+      "torque": "torque/torque.js",
+      "speed": "speed/speed.js"
     }
   },
   "scripts": {
