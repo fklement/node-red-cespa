@@ -6,6 +6,7 @@ const fs = require('fs'),
 
 var _array = require('lodash/array');
 var _lang = require('lodash/lang');
+var _collection = require('lodash/collection');
 
 // Set our values that are needed to connect to the RESTapi via SSL/TLS
 cert = fs.readFileSync(certFile);
@@ -58,7 +59,16 @@ function queryImplementation(query, node, msg, requestedColumns, requestDataHead
         body = JSON.parse(body);
 
         if (response.statusCode == 200) {
-            requestDataHead.items = requestDataHead.items.concat(_lang.toArray(getResponseData(body.result.data, requestedColumns)));
+            var receivedItems = _lang.toArray(getResponseData(body.result.data, requestedColumns));
+
+            // Filtering out all unwanted device id's
+            if (receivedItems.length > 0)
+                receivedItems = _collection.filter(receivedItems, function (row) {
+                    return row.did === "181812101807312401616";
+                });
+
+            // Merging of all items
+            requestDataHead.items = requestDataHead.items.concat(receivedItems);
             requestDataHead.itemsCount = body.result["items-left"];
 
             node.status({
@@ -79,7 +89,6 @@ function queryImplementation(query, node, msg, requestedColumns, requestDataHead
             });
 
             requestDataHead.itemsCount = Object.keys(requestDataHead.items).length;
-
             msg.payload = requestDataHead;
             node.send(msg);
         } else {

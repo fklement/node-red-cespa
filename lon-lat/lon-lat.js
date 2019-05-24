@@ -29,6 +29,7 @@ module.exports = function (RED) {
             }
 
             scotify.execQuery(query, node, msg, {
+                did: 0,
                 x: 1,
                 y: 2,
                 z: 3
