@@ -1,39 +1,37 @@
 module.exports = function (RED) {
     function torqueNode(config) {
         RED.nodes.createNode(this, config);
+        this.queryTimeRange = config.querytimerange;
         var node = this;
-
         node.on('input', function (msg) {
-            const fs = require('fs'),
-                path = require('path'),
-                certFile = path.resolve(__dirname, '../ssl/RESTTEST_cert.pem'),
-                keyFile = path.resolve(__dirname, '../ssl/RESTTEST_key.pem'),
-                request = require('request');
+            const scotify = require('../scotify.js');
+
+            var currentTimestamp = Date.now() * 1000;
             const query = {
                 "db": "tires",
                 "schema": "hackaton",
                 "table": "vehicle",
+                "where": {
+                    "AND": [
+               //     {
+               //      "DID": {
+               //          "=": "181812101806072401603"
+               //      }
+               //  },
+                        {
+                            "TS": {
+                                ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
+                            }
+                        }
+                    ]
+               }
             }
 
-            var buff = new Buffer(JSON.stringify(query)).toString("base64");
-            var jsonobj = query.toString("base64");
 
-            const options = {
-                url: "https://ctpwyd.conti.de:443/data?q=" + buff,
-                cert: fs.readFileSync(certFile),
-                key: fs.readFileSync(keyFile)
-            };
-
-            request.get(options, function (error, response, body) {
-                var obj = JSON.parse(body);
-                var op = obj.result.data.map(function(item) {
-                    return item[15];
-                })
-                msg.payload = op;
-                node.send(msg);
-            });
-
+        scotify.execQuery(query, node, msg, {
+            torque: 15
         });
+    });
     }
     RED.nodes.registerType("torque", torqueNode);
 }

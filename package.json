@@ -32,7 +32,9 @@
   },
   "homepage": "https://github.com/fklement/node-red-cespa#readme",
   "dependencies": {
-    "lodash": "^4.17.11",
-    "request": "^2.88.0"
+    "node-red-contrib-nexmo": "^3.1.1",
+    "request": "^2.88.0",
+    "twilio": "^3.31.0",
+    "lodash": "^4.17.11"
   }
 }

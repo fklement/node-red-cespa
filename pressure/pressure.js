@@ -1,42 +1,36 @@
 module.exports = function (RED) {
     function PressureNode(config) {
         RED.nodes.createNode(this, config);
+        this.queryTimeRange = config.querytimerange;
         var node = this;
         node.on('input', function (msg) {
-            const fs = require('fs'),
-                path = require('path'),
-                certFile = path.resolve(__dirname, '../ssl/RESTTEST_cert.pem'),
-                keyFile = path.resolve(__dirname, '../ssl/RESTTEST_key.pem'),
-                request = require('request');
+            const scotify = require('../scotify.js');
+
+            var currentTimestamp = Date.now() * 1000;
 
             const query = {
                 "db": "tires",
                 "schema": "hackaton",
                 "table": "ruuvidata",
-                 //"where": {
-                 //    "DID": {
-                 //        "=": "RESTTEST"
-                 //    }
-                 //}
+                 "where": {
+                     "AND": [
+                //     {
+                //      "DID": {
+                //          "=": "181812101806072401603"
+                //      }
+                //  },
+                         {
+                             "TS": {
+                                 ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
+                             }
+                         }
+                     ]
+                }
             }
 
-            var buff = new Buffer(JSON.stringify(query)).toString("base64");
-
-            console.log(query.toString("base64"))
-
-            const options = {
-                url: "https://ctpwyd.conti.de:443/data?q=" + buff,
-                cert: fs.readFileSync(certFile),
-                key: fs.readFileSync(keyFile)
-            };
-
-            request.get(options, function (error, response, body) {
-                msg.payload = body;
-                node.send(msg);
+            scotify.execQuery(query, node, msg, {
+                pressure: 6
             });
-
-
-
         });
     }
     RED.nodes.registerType("pressure", PressureNode);

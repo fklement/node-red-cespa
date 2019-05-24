@@ -13,18 +13,18 @@ module.exports = function (RED) {
                 "schema": "hackaton",
                 "table": "gps",
                 "where": {
-                    //     "AND": [
-                    //         // {
-                    //         //     "DID": {
-                    //         //         "=": "RESTTEST"
-                    //         //     }
-                    //         // },
-                    // {
-                    "TS": {
-                        ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
-                    }
-                    // }
-                    // ]
+                    "AND": [
+                        //         // {
+                        //         //     "DID": {
+                        //         //         "=": "181812101806072401603"
+                        //         //     }
+                        //         // },
+                        {
+                            "TS": {
+                                ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
+                            }
+                        }
+                    ]
                 }
             }
 
