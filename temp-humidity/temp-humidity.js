@@ -8,15 +8,20 @@ module.exports = function (RED) {
                 certFile = path.resolve(__dirname, '../ssl/RESTTEST_cert.pem'),
                 keyFile = path.resolve(__dirname, '../ssl/RESTTEST_key.pem'),
                 request = require('request');
-
+            var requesteddatet = config.name;
+            if(requesteddatet === "TEMPERATURE") {
+                requesteddatet = "accgyr";
+            }else {
+                requesteddatet = "gps";
+            }
             const query = {
                 "db": "tires",
                 "schema": "hackaton",
-                "table": "ruuvidata",
+                "table": requesteddatet,
             }
 
             var buff = new Buffer(JSON.stringify(query)).toString("base64");
-
+            console.log(requesteddatet);
             console.log(query.toString("base64"))
 
             const options = {
@@ -26,7 +31,7 @@ module.exports = function (RED) {
             };
 
             request.get(options, function (error, response, body) {
-                msg.payload = node.prefix + msg.payload.toLowerCase();
+                msg.payload = node.name;
                 node.send(msg);
             });
 
