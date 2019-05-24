@@ -15,13 +15,14 @@ module.exports = function (RED) {
                 "table": "ruuvidata",
                  //"where": {
                  //    "DID": {
-                 //        "=": "RESTTEST"
+                 //        "=": 181812101806072401603
                  //    }
                  //}
             }
 
             var buff = new Buffer(JSON.stringify(query)).toString("base64");
 
+            
             console.log(query.toString("base64"))
 
             const options = {
@@ -31,8 +32,28 @@ module.exports = function (RED) {
             };
 
             request.get(options, function (error, response, body) {
-                msg.payload = body;
-                node.send(msg);
+                if (response.statusCode == 200) {
+                    node.status({
+                        fill: "green",
+                        shape: "dot",
+                        text: "received 200"
+                    });
+                    var obj = JSON.parse(body);
+                    var op = obj.result.data.map(function(item) {
+                        return item[6];
+                      });
+                    console.log(op.length);
+                    msg.payload = op;
+                    node.send(msg);
+                }  else {
+                    node.error("error", response.statusCode);
+                    node.status({
+                        fill: "red",
+                        shape: "dot",
+                        text: "error " + response.statusCode
+                    });
+                }
+                              
             });
 
 
