@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-    function LonLat(config) {
+    function LonLatNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
         node.on('input', function (msg) {
@@ -12,12 +12,12 @@ module.exports = function (RED) {
             const query = {
                 "db": "tires",
                 "schema": "hackaton",
-                "table": "accgyr",
-                "where": {
-                    "DID": {
-                        "=": "RESTTEST"
-                    }
-                }
+                "table": "gps",
+                // "where": {
+                //     "DID": {
+                //         "=": "RESTTEST"
+                //     }
+                // }
             }
 
             var buff = new Buffer(JSON.stringify(query)).toString("base64");
@@ -31,7 +31,8 @@ module.exports = function (RED) {
             };
 
             request.get(options, function (error, response, body) {
-                node.send(body);
+                msg.payload = body;
+                node.send(msg);
             });
 
 
