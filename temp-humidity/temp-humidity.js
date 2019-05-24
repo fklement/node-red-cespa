@@ -10,20 +10,15 @@ module.exports = function (RED) {
                 certFile = path.resolve(__dirname, '../ssl/RESTTEST_cert.pem'),
                 keyFile = path.resolve(__dirname, '../ssl/RESTTEST_key.pem'),
                 request = require('request');
-            if(node.requestedinfo === "TEMP") {
-                node.requestedinfo = "accgyr";
-            }else {
-                node.requestedinfo = "gps";
-            }
+                console.log(this.requestedinfo);
             const query = {
                 "db": "tires",
                 "schema": "hackaton",
-                "table": node.requestedinfo,
+                "table": "ruuvidata",
             }
 
             var buff = new Buffer(JSON.stringify(query)).toString("base64");
-            console.log(node.requestedinfo);
-            console.log(query.toString("base64"));
+            var jsonobj = query.toString("base64");
 
             const options = {
                 url: "https://ctpwyd.conti.de:443/data?q=" + buff,
@@ -32,11 +27,15 @@ module.exports = function (RED) {
             };
 
             request.get(options, function (error, response, body) {
-                msg.payload = body;
+                var obj = JSON.parse(body);
+                msg.payload = obj;
+                node.send(msg);
+                var op = obj.result.data.map(function(item) {
+                    return item[node.requestedinfo];
+                })
+                msg.payload = op;
                 node.send(msg);
             });
-
-
 
         });
     }
