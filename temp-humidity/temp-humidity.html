@@ -6,6 +6,9 @@
             name: {
                 value: ""
             },
+            requestedinfo: {
+                value: 3
+            }
         },
         inputs: 1,
         outputs: 1,
@@ -18,10 +21,10 @@
 
 <script type="text/x-red" data-template-name="temp-humidity">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
-        <select type="text" id="node-input-name">
-            <option value="TEMP">Temperature</option>
-            <option value="HUMIDITY">Humidity</option>
+        <label for="node-input-requestedinfo"><i class="icon-tag"></i> Name</label>
+        <select type="text" id="node-input-requestedinfo" placeholder="gps" value="gps">
+            <option value="4">Temperature</option>
+            <option value="3">Humidity</option>
         </select>
     </div>
 </script>
