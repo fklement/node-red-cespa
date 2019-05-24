@@ -64,7 +64,7 @@ function queryImplementation(query, node, msg, requestedColumns, requestDataHead
             // Filtering out all unwanted device id's
             if (receivedItems.length > 0)
                 receivedItems = _collection.filter(receivedItems, function (row) {
-                    return row.did === "181812101807312401616";
+                    return row.did === "181812101806072401603";
                 });
 
             // Merging of all items
