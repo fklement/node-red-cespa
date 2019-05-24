@@ -4,6 +4,8 @@ const fs = require('fs'),
     certFile = path.resolve(__dirname, 'ssl/RESTTEST_cert.pem'),
     keyFile = path.resolve(__dirname, 'ssl/RESTTEST_key.pem');
 
+var array = require('lodash/array');
+
 // Set our values that are needed to connect to the RESTapi via SSL/TLS
 cert = fs.readFileSync(certFile);
 key = fs.readFileSync(keyFile);
@@ -22,12 +24,6 @@ getOptions = (query) => {
 // Returns the difference of our current timestamp and the query timestamp as an integer
 exports.calcTimeDiff = (currentTimestamp, queryTimestamp) => parseInt(currentTimestamp - (queryTimestamp * 1000000));
 
-// exports.composePayload = (body) => {
-//     {
-//         "items": body.result.data,
-//         "itemsCount": body.result["items-left"]
-//     }
-// }
 
 exports.execQuery = (query, node, msg, requestedColumns) => {
 
@@ -49,16 +45,16 @@ exports.execQuery = (query, node, msg, requestedColumns) => {
 
             msg.payload = {
                 "items": body.result.data.map(function (item) {
-                    var array = {};
+                    var results = [];
 
                     Object.keys(requestedColumns).forEach(function (key) {
-                        // array.push({
-                        //     : item[requestedColumns[key]]
-                        // })
-                        [key] = item[requestedColumns[key]]
-                    });
+                        results.push([
+                            key,
+                            item[requestedColumns[key]]
+                        ])
 
-                    return array
+                    });
+                    return array.fromPairs(results);
                 }),
                 "itemsCount": body.result["items-left"]
             };
