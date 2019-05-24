@@ -4,40 +4,35 @@ module.exports = function (RED) {
         this.queryTimeRange = config.querytimerange;
         var node = this;
         node.on('input', function (msg) {
-            const fs = require('fs'),
-                path = require('path'),
-                certFile = path.resolve(__dirname, '../ssl/RESTTEST_cert.pem'),
-                keyFile = path.resolve(__dirname, '../ssl/RESTTEST_key.pem'),
+            const scotify = require('../scotify.js'),
                 request = require('request');
 
-            var hrTime = process.hrtime();
-            var currentTimestamp = hrTime[0] * 1000000 + hrTime[1] / 1000;
+            var currentTimestamp = Date.now() * 1000;
 
             const query = {
                 "db": "tires",
                 "schema": "hackaton",
                 "table": "gps",
                 "where": {
-                    "AND": [{
-                            "DID": {
-                                "=": "RESTTEST"
-                            }
-                        },
+                    "AND": [
+                        // {
+                        //     "DID": {
+                        //         "=": "RESTTEST"
+                        //     }
+                        // },
                         {
                             "TS": {
-                                ">": currentTimestamp - (node.queryTimeRange * 1000000)
+                                ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
                             }
                         }
                     ]
                 }
             }
 
-            var buff = new Buffer.from(JSON.stringify(query)).toString("base64");
-
             const options = {
-                url: "https://ctpwyd.conti.de:443/data?q=" + buff,
-                cert: fs.readFileSync(certFile),
-                key: fs.readFileSync(keyFile)
+                url: scotify.execQuery(query),
+                cert: scotify.cert,
+                key: scotify.key
             };
 
             request.get(options, function (error, response, body) {
@@ -46,22 +41,29 @@ module.exports = function (RED) {
                     shape: "dot",
                     text: "send request"
                 });
-                if (response.StatusCode == 200) {
+
+                body = JSON.parse(body);
+
+                if (response.statusCode == 200) {
                     node.status({
                         fill: "green",
                         shape: "dot",
                         text: "received 200"
                     });
-                    // TODO: Strip out body data
-                    msg.payload = body;
+
+                    msg.payload = {
+                        "items": body.result.data,
+                        "itemsCount": body.result["items-left"]
+                    };
                     node.send(msg);
                 } else {
-                    node.error("error", response.StatusCode);
                     node.status({
                         fill: "red",
                         shape: "dot",
-                        text: "error " + response.StatusCode
+                        text: "error " + error
                     });
+
+                    node.error("error", body.error);
                 }
             });
         });
