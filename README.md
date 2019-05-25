@@ -38,6 +38,7 @@ The services wich are implemented in this project are called "theft detection", 
 So "theft detection" is basically a movement detection. It alerts the owner when the scooter is changing position without him knowing.
 
 #### intelliCharge
-It's a smart charging system which predicts the optimal time to charge the scooter (e.g. over night because of low energy costs). You can time, when the scooter should be ready to drive, so it will charge until that time.
+It's a smart charging system which predicts the optimal time to charge the scooter (e.g. over night because of low energy costs). You can time, when the scooter should be ready to drive, so it will charge until that time (Battery Charging Schedule).
 
-
+#### Dashboard
+Displays the critical information about the system.It enables the user to trigger control application (e.g. live tracking).
