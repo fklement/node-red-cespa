@@ -14,16 +14,14 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "repeat": "2",
+        "repeat": "1",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 130,
-        "y": 260,
+        "x": 110,
+        "y": 160,
         "wires": [
             [
-                "2f2d5e78.b37192",
-                "564c66de.08d8f8",
                 "754cfd76.8bacec"
             ]
         ]
@@ -34,8 +32,8 @@
         "z": "fe13aa13.d3177",
         "name": "",
         "querytimerange": "2",
-        "x": 610,
-        "y": 340,
+        "x": 330,
+        "y": 280,
         "wires": [
             [
                 "f34e5282.6cce2"
@@ -52,7 +50,8 @@
         "y": 160,
         "wires": [
             [
-                "f34e5282.6cce2"
+                "f34e5282.6cce2",
+                "c67e95ed.c8b988"
             ]
         ]
     },
@@ -62,11 +61,12 @@
         "z": "fe13aa13.d3177",
         "name": "",
         "querytimerange": "2",
-        "x": 590,
-        "y": 260,
+        "x": 330,
+        "y": 220,
         "wires": [
             [
-                "f34e5282.6cce2"
+                "f34e5282.6cce2",
+                "ccdd02a4.cb26c8"
             ]
         ]
     },
@@ -90,7 +90,7 @@
         "reduceInit": "",
         "reduceInitType": "num",
         "reduceFixup": "",
-        "x": 840,
+        "x": 660,
         "y": 160,
         "wires": [
             [
@@ -106,58 +106,12 @@
         "func": "var spd = msg.payload[0].items[0].act_spd;\nconsole.log(\"Spd is: \" +spd);\n\nvar x = msg.payload[1].items[0].x;\nvar y = msg.payload[1].items[0].y;\nvar z = msg.payload[1].items[0].z;\n\nvar em = msg.payload[2].items[0].em_opm;\nconsole.log(\"OM is: \" +em);\n\nvar oldx = flow.get(\"x\");\nvar oldy = flow.get(\"y\");\nvar oldz = flow.get(\"z\");\n\nflow.set(\"x\", x);\nflow.set(\"y\", y);\nflow.set(\"z\", z);\n\nconsole.log(\"X: \"+x+\" Y: \"+y+\" Z: \" +z);\nconsole.log(\"OX: \"+oldx+\" OY: \"+oldy+\" OZ: \" +oldz);\n\nvar xdiff = Math.abs(oldx-x);\nvar ydiff = Math.abs(oldy-y);\nvar zdiff = Math.abs(oldz-z);\n\nvar currentpoints = flow.get(\"points\");\nif(xdiff > 10 || ydiff > 10 || zdiff > 10) {\n    flow.set(\"points\", currentpoints - 20);\n}\nelse if(xdiff > 5 || ydiff > 5 || zdiff > 5) {\n    flow.set(\"points\", currentpoints -10);\n}\nelse if(xdiff > 1 || ydiff > 1 || zdiff > 1) {\n    flow.set(\"points\", currentpoints -5);\n}\ncurrentpoints = flow.get(\"points\");\n\nif(em === 3) {\n    flow.set(\"points\", currentpoints -1);\n}\ncurrentpoints = flow.get(\"points\");\n\nif(spd < 30) {\n    flow.set(\"points\", currentpoints + 3);\n}\nelse if(spd < 70) {\n    flow.set(\"points\", currentpoints + 2);\n}\nelse if(spd < 100){\n    flow.set(\"points\", currentpoints + 1);\n}\nelse {\n    flow.set(\"points\", currentpoints -1);\n}\ncurrentpoints = flow.get(\"points\");\n\nif(currentpoints > 100 || currentpoints < 0 ) {\n    flow.set(\"points\", 50);\n}\n\nconsole.log(\"Your current points are : \" + currentpoints);\n\n\nmsg.payload = currentpoints;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 970,
+        "x": 790,
         "y": 240,
         "wires": [
             [
                 "b08a2d05.837a1",
                 "83e1c587.28412"
-            ]
-        ]
-    },
-    {
-        "id": "2f2d5e78.b37192",
-        "type": "delay",
-        "z": "fe13aa13.d3177",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "300",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 360,
-        "y": 260,
-        "wires": [
-            [
-                "c67e95ed.c8b988"
-            ]
-        ]
-    },
-    {
-        "id": "564c66de.08d8f8",
-        "type": "delay",
-        "z": "fe13aa13.d3177",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "600",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 360,
-        "y": 340,
-        "wires": [
-            [
-                "ccdd02a4.cb26c8"
             ]
         ]
     },
@@ -263,7 +217,7 @@
         ],
         "useOldStyle": false,
         "outputs": 1,
-        "x": 1270,
+        "x": 1090,
         "y": 120,
         "wires": [
             []
@@ -282,11 +236,9 @@
         "once": false,
         "onceDelay": 0.1,
         "x": 120,
-        "y": 580,
+        "y": 480,
         "wires": [
             [
-                "6d180862.6e7818",
-                "74e7f68.883b088",
                 "f90fc531.7ae148"
             ]
         ]
@@ -311,7 +263,7 @@
         "reduceInit": "",
         "reduceInitType": "num",
         "reduceFixup": "",
-        "x": 860,
+        "x": 680,
         "y": 480,
         "wires": [
             [
@@ -327,58 +279,12 @@
         "func": "var spd = msg.payload[0];\nconsole.log(\"Spd is: \" +spd);\n\nvar acc = msg.payload[1];\nconsole.log(\"Acceleration is: \" +acc);\n\nvar em = msg.payload[2];\nconsole.log(\"OM is: \" +em);\n\nvar oldacc = flow.get(\"acceleration\");\n\nflow.set(\"acceleration\",acc);\n\nconsole.log(\"Acceleration: \" + acc);\nconsole.log(\"Old Acceleration \" + oldacc);\nvar currentpoints = flow.get(\"points\");\n\nif(acc > 10) {\n    flow.set(\"points\", currentpoints - 4);\n}\nelse if(acc > 5) {\n    flow.set(\"points\", currentpoints -2);\n}\nelse if(acc > 1) {\n    flow.set(\"points\", currentpoints -1);\n}\ncurrentpoints = flow.get(\"points\");\n\nif(em === 3) {\n    flow.set(\"points\", currentpoints -1);\n}\ncurrentpoints = flow.get(\"points\");\n\nif(spd < 30) {\n    flow.set(\"points\", currentpoints + 5);\n}\nelse if(spd < 70) {\n    flow.set(\"points\", currentpoints + 4);\n}\nelse if(spd < 100){\n    flow.set(\"points\", currentpoints + 3);\n}\nelse {\n    flow.set(\"points\", currentpoints -1);\n}\ncurrentpoints = flow.get(\"points\");\nif(currentpoints > 100 || currentpoints < 0) {\n    flow.set(\"points\", 50);\n}\n\nconsole.log(\"Your current points are : \" + currentpoints);\n\n\nmsg.payload = currentpoints;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 970,
+        "x": 790,
         "y": 560,
         "wires": [
             [
                 "8c0766bd.134c28",
                 "525f741b.60024c"
-            ]
-        ]
-    },
-    {
-        "id": "6d180862.6e7818",
-        "type": "delay",
-        "z": "fe13aa13.d3177",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "300",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 360,
-        "y": 580,
-        "wires": [
-            [
-                "26832a5f.67d01e"
-            ]
-        ]
-    },
-    {
-        "id": "74e7f68.883b088",
-        "type": "delay",
-        "z": "fe13aa13.d3177",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "600",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "x": 360,
-        "y": 660,
-        "wires": [
-            [
-                "5ba39822.b23ef8"
             ]
         ]
     },
@@ -418,7 +324,7 @@
         ],
         "useOldStyle": false,
         "outputs": 1,
-        "x": 1270,
+        "x": 1090,
         "y": 460,
         "wires": [
             []
@@ -437,7 +343,8 @@
         "y": 480,
         "wires": [
             [
-                "60398fe2.fad3c"
+                "60398fe2.fad3c",
+                "26832a5f.67d01e"
             ]
         ]
     },
@@ -450,11 +357,12 @@
         "high": "20",
         "inte": "true",
         "property": "payload",
-        "x": 590,
-        "y": 580,
+        "x": 330,
+        "y": 540,
         "wires": [
             [
-                "60398fe2.fad3c"
+                "60398fe2.fad3c",
+                "5ba39822.b23ef8"
             ]
         ]
     },
@@ -467,8 +375,8 @@
         "high": "7",
         "inte": "true",
         "property": "payload",
-        "x": 610,
-        "y": 660,
+        "x": 350,
+        "y": 600,
         "wires": [
             [
                 "60398fe2.fad3c"
@@ -483,7 +391,7 @@
         "group": "1326dccf.9d2833",
         "voice": "en-US",
         "always": true,
-        "x": 1430,
+        "x": 1250,
         "y": 560,
         "wires": []
     },
@@ -491,11 +399,11 @@
         "id": "525f741b.60024c",
         "type": "function",
         "z": "fe13aa13.d3177",
-        "name": "",
+        "name": "TTS",
         "func": "if(msg.payload > 100) {\n    msg.payload = \"Very well, good driving\";\n    return msg;\n}\nelse if(msg.payload < 0) {\n    msg.payload = \"You are a terrible driver\";\n    return msg;\n}\n",
         "outputs": 1,
         "noerr": 0,
-        "x": 1270,
+        "x": 1090,
         "y": 560,
         "wires": [
             [
@@ -511,7 +419,7 @@
         "group": "1326dccf.9d2833",
         "voice": "en-US",
         "always": true,
-        "x": 1430,
+        "x": 1250,
         "y": 240,
         "wires": []
     },
@@ -519,11 +427,11 @@
         "id": "83e1c587.28412",
         "type": "function",
         "z": "fe13aa13.d3177",
-        "name": "",
+        "name": "TTS",
         "func": "if(msg.payload > 100) {\n    msg.payload = \"Very well, good driving\";\n    return msg;\n}\nelse if(msg.payload < 0) {\n    msg.payload = \"You are a terrible driver\";\n    return msg;\n}\n",
         "outputs": 1,
         "noerr": 0,
-        "x": 1270,
+        "x": 1090,
         "y": 240,
         "wires": [
             [
