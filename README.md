@@ -7,7 +7,7 @@ It's a nodeRED based project and there will be nodes implemented to it like char
 lon/lat, pressure, temp/humidity, acceleration and torque.
 The data from the scooter is provided via an rest api.
 So getting the data from the cloud and building up the services.
-The services wich are implemented in this project are called "theft detection", "intelliCharge",
+The services wich are implemented in this project are called "theft detection", "intelliCharge" and the Dashboard
 
 ### Needed Signals
 
