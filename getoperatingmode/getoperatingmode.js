@@ -30,7 +30,7 @@ module.exports = function (RED) {
 
             scotify.execQuery(query, node, msg, {    
                 did: 0,
-                act_spd: 14
+                em_opm: 13
             });
 
         });

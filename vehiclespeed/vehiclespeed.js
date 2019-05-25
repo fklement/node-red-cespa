@@ -11,7 +11,7 @@ module.exports = function (RED) {
             const query = {
                 "db": "tires",
                 "schema": "hackaton",
-                "table": "gps",
+                "table": "vehicle",
                 "where": {
                     "AND": [
                         //         // {
@@ -30,7 +30,7 @@ module.exports = function (RED) {
 
             scotify.execQuery(query, node, msg, {    
                 did: 0,
-                spd: 5
+                act_spd: 14
             });
 
         });
