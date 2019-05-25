@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-    function SpeedNode(config) {
+    function VehiclespeedNode(config) {
         RED.nodes.createNode(this, config);
         this.queryTimeRange = config.querytimerange;
         var node = this;
@@ -35,5 +35,5 @@ module.exports = function (RED) {
 
         });
     }
-    RED.nodes.registerType("speed", SpeedNode);
+    RED.nodes.registerType("vehiclespeed", VehiclespeedNode);
 }

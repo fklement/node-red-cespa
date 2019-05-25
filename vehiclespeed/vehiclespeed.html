@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('speed', {
+    RED.nodes.registerType('vehiclespeed', {
         category: 'function',
         color: '#a6bbcf',
         defaults: {
@@ -14,12 +14,12 @@
         outputs: 1,
         icon: "file.png",
         label: function () {
-            return this.name || "speed";
+            return this.name || "vehiclespeed";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="speed">
+<script type="text/x-red" data-template-name="vehiclespeed">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -28,6 +28,6 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="speed">
-    <p>A simple node that provides the speed</p>
+<script type="text/x-red" data-help-name="vehiclespeed">
+    <p>A simple node that provides the vehiclespeed</p>
 </script>
