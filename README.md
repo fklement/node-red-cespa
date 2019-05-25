@@ -2,7 +2,7 @@
 
 ## Scootify 
 
-### This project is about implementing smart services to an electrical scooter.
+This project is about implementing smart services to an electrical scooter.
 It's a nodeRED based project and there will be nodes implemented to it like charge,
 lon/lat, pressure, temp/humidity, acceleration and torque.
 The data from the scooter is provided via an rest api.
