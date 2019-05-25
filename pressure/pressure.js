@@ -12,19 +12,10 @@ module.exports = function (RED) {
                 "db": "tires",
                 "schema": "hackaton",
                 "table": "ruuvidata",
-                 "where": {
-                     "AND": [
-                //     {
-                //      "DID": {
-                //          "=": "181812101806072401603"
-                //      }
-                //  },
-                         {
-                             "TS": {
-                                 ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
-                             }
-                         }
-                     ]
+                "where": {
+                    "TS": {
+                        ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
+                    }
                 }
             }
 

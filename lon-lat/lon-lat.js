@@ -13,27 +13,17 @@ module.exports = function (RED) {
                 "schema": "hackaton",
                 "table": "gps",
                 "where": {
-                    "AND": [
-                        //         // {
-                        //         //     "DID": {
-                        //         //         "=": "181812101806072401603"
-                        //         //     }
-                        //         // },
-                        {
-                            "TS": {
-                                ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
-                            }
-                        }
-                    ]
+                    "TS": {
+                        ">=": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
+                    }
                 }
             }
 
             scotify.execQuery(query, node, msg, {
                 did: 0,
-                altitude: 1,
-                lat: 5,
-                lon: 6,
-                speed: 7
+                lat: 2,
+                lon: 3,
+                altitude: 4
             });
         });
     }
