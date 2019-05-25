@@ -1,0 +1,198 @@
+[
+    {
+        "id": "ad05d31b.3ed34",
+        "type": "tab",
+        "label": "Flow 5",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d2d50d82.557a9",
+        "type": "inject",
+        "z": "ad05d31b.3ed34",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "1",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.2",
+        "x": 150,
+        "y": 200,
+        "wires": [
+            [
+                "66b96c03.8e97d4",
+                "e206157e.bdc578"
+            ]
+        ]
+    },
+    {
+        "id": "e1ee6d36.6bb9a",
+        "type": "function",
+        "z": "ad05d31b.3ed34",
+        "name": "",
+        "func": "//lat = msg.payload.items[0].lat;\n//lon = msg.payload.items[0].lon;\n\nvar lat = msg.payload[0];\nvar lon = msg.payload[1];\n\nmsg.payload = { \"name\":\"A3090\", \"lat\":lat, \"lon\":lon, \"line\": [ [flow.get(\"lat\"), flow.get(\"lon\")], [lat, lon]] }\n\nflow.set(\"lon\", lon);\nflow.set(\"lat\", lat);\n\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 610,
+        "y": 300,
+        "wires": [
+            [
+                "1b2281f.0f5047e"
+            ]
+        ]
+    },
+    {
+        "id": "629fe412.46d1bc",
+        "type": "debug",
+        "z": "ad05d31b.3ed34",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 670,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "1b2281f.0f5047e",
+        "type": "worldmap",
+        "z": "ad05d31b.3ed34",
+        "name": "",
+        "lat": "",
+        "lon": "",
+        "zoom": "",
+        "layer": "",
+        "cluster": "",
+        "maxage": "",
+        "usermenu": "show",
+        "layers": "show",
+        "panit": "false",
+        "panlock": "false",
+        "zoomlock": "false",
+        "hiderightclick": "false",
+        "coords": "false",
+        "path": "/worldmap",
+        "x": 780,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "95a42e63.5d8f2",
+        "type": "inject",
+        "z": "ad05d31b.3ed34",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 190,
+        "y": 360,
+        "wires": [
+            [
+                "12eb5faa.dea3f"
+            ]
+        ]
+    },
+    {
+        "id": "12eb5faa.dea3f",
+        "type": "change",
+        "z": "ad05d31b.3ed34",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "lon",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "lat",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "66b96c03.8e97d4",
+        "type": "random",
+        "z": "ad05d31b.3ed34",
+        "name": "",
+        "low": "0",
+        "high": "60",
+        "inte": "false",
+        "property": "payload",
+        "x": 320,
+        "y": 240,
+        "wires": [
+            [
+                "9071d350.9ae12"
+            ]
+        ]
+    },
+    {
+        "id": "e206157e.bdc578",
+        "type": "random",
+        "z": "ad05d31b.3ed34",
+        "name": "",
+        "low": "0",
+        "high": "13",
+        "inte": "false",
+        "property": "payload",
+        "x": 320,
+        "y": 300,
+        "wires": [
+            [
+                "9071d350.9ae12"
+            ]
+        ]
+    },
+    {
+        "id": "9071d350.9ae12",
+        "type": "join",
+        "z": "ad05d31b.3ed34",
+        "name": "",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 470,
+        "y": 260,
+        "wires": [
+            [
+                "e1ee6d36.6bb9a",
+                "629fe412.46d1bc"
+            ]
+        ]
+    }
+]
