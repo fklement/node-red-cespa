@@ -9,7 +9,10 @@
       "pressure": "pressure/pressure.js",
       "acceleration": "acceleration/acceleration.js",
       "temp-humidity": "temp-humidity/temp-humidity.js",
-      "torque": "torque/torque.js"
+      "torque": "torque/torque.js",
+      "gpsspeed": "gpsspeed/gpsspeed.js",
+      "getoperatingmode": "getoperatingmode/getoperatingmode.js",
+      "vehiclespeed": "vehiclespeed/vehiclespeed.js"
     }
   },
   "scripts": {
@@ -36,7 +39,7 @@
     "node-red-contrib-nexmo": "^3.1.1",
     "request": "^2.88.0",
     "twilio": "^3.31.0",
-    "lodash": "^4.17.11"
+    "urlencode": "^1.1.0"
   },
   "devDependencies": {
     "mocha": "6.1.4",

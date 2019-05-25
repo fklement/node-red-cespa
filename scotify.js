@@ -1,5 +1,6 @@
 const fs = require('fs'),
     path = require('path'),
+    urlencode = require('urlencode'),
     request = require('request'),
     certFile = path.resolve(__dirname, 'ssl/RESTTEST_cert.pem'),
     keyFile = path.resolve(__dirname, 'ssl/RESTTEST_key.pem');
@@ -13,7 +14,7 @@ cert = fs.readFileSync(certFile);
 key = fs.readFileSync(keyFile);
 
 // Decodes the given JSON query object to an base64 string and concatinates it with our url
-getApiUrl = (queryObject) => "https://ctpwyd.conti.de:443/data?q=" + new Buffer.from(JSON.stringify(queryObject)).toString("base64");
+getApiUrl = (queryObject) => "https://ctpwyd.conti.de:443/data?q=" + urlencode(new Buffer.from(JSON.stringify(queryObject)).toString("base64"));
 
 // Returns the request options object with the respective tls credentials for the cert and key
 getOptions = (query) => {
@@ -40,8 +41,9 @@ getResponseData = (data, requestedColumns) => {
 };
 
 // Returns the difference of our current timestamp and the query timestamp as an integer
-exports.calcTimeDiff = (currentTimestamp, queryTimestamp) => parseInt(currentTimestamp - (queryTimestamp * 1000000));
-
+exports.calcTimeDiff = (currentTimestamp, queryTimestamp) => {
+    return parseInt(currentTimestamp - (queryTimestamp * 100000));
+}
 // Execute the final query and fetches the data from the REST API + handles error cases and dataItems "overflow"
 function queryImplementation(query, node, msg, requestedColumns, requestDataHead) {
     var requestDataHead = requestDataHead || {
@@ -65,6 +67,7 @@ function queryImplementation(query, node, msg, requestedColumns, requestDataHead
             if (receivedItems.length > 0)
                 receivedItems = _collection.filter(receivedItems, function (row) {
                     return row.did === "181812101806072401603";
+                    // return row.did === "181812101807312401616";
                 });
 
             // Merging of all items
