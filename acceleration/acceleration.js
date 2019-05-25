@@ -13,22 +13,13 @@ module.exports = function (RED) {
                 "schema": "hackaton",
                 "table": "accgyr",
                 "where": {
-                    "AND": [
-                        //         // {
-                        //         //     "DID": {
-                        //         //         "=": "181812101806072401603"
-                        //         //     }
-                        //         // },
-                        {
-                            "TS": {
-                                ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
-                            }
-                        }
-                    ]
+                    "TS": {
+                        ">=": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
+                    }
                 }
             }
 
-            scotify.execQuery(query, node, msg, {    
+            scotify.execQuery(query, node, msg, {
                 did: 0,
                 x: 2,
                 y: 3,

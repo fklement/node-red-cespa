@@ -16,25 +16,15 @@ module.exports = function (RED) {
                 "schema": "hackaton",
                 "table": "ruuvidata",
                 "where": {
-                    "AND": [
-                        //         // {
-                        //         //     "DID": {
-                        //         //         "=": "181812101806072401603"
-                        //         //     }
-                        //         // },
-                        {
-                            "TS": {
-                                ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
-                            }
-                        }
-                    ]
+                    "TS": {
+                        ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
+                    }
                 }
             }
 
-
             var columns = [];
             columns.push(["did", 0]);
-            
+
             if (node.requestedinfo == 3) {
                 columns.push(["hum", node.requestedinfo]);
             } else {
