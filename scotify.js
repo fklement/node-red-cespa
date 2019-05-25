@@ -58,9 +58,9 @@ function queryImplementation(query, node, msg, requestedColumns, requestDataHead
             text: "send request"
         });
 
-        body = JSON.parse(body);
 
         if (response.statusCode == 200) {
+            body = JSON.parse(body);
             var receivedItems = _lang.toArray(getResponseData(body.result.data, requestedColumns));
 
             // Filtering out all unwanted device id's
