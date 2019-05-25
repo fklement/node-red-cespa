@@ -12,27 +12,18 @@ module.exports = function (RED) {
                 "schema": "hackaton",
                 "table": "vehicle",
                 "where": {
-                    "AND": [
-               //     {
-               //      "DID": {
-               //          "=": "181812101806072401603"
-               //      }
-               //  },
-                        {
-                            "TS": {
-                                ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
-                            }
-                        }
-                    ]
-               }
+                    "TS": {
+                        ">": scotify.calcTimeDiff(currentTimestamp, node.queryTimeRange)
+                    }
+                }
             }
 
 
-        scotify.execQuery(query, node, msg, {
-            did: 0,
-            torque: 15
+            scotify.execQuery(query, node, msg, {
+                did: 0,
+                torque: 15
+            });
         });
-    });
     }
     RED.nodes.registerType("torque", torqueNode);
 }
